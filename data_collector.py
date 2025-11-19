@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 from typing import List, Dict, Tuple
 from api_client import SphinxAPIClient
-from lstm_planet2 import Planet2LSTM
 from sin_model import OnlineSinusoidModel
 
 import os
