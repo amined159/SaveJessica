@@ -171,18 +171,32 @@ We assume that for each planet, the **true survival probability** of a Morty is:
 * **periodic in time (trip index)**
 * with a **known period** (frequency), but **unknown offset, amplitude, and phase**
 
-So for each planet ( p ), we model survival as:
+# Planet Survival Model
 
-[
-y(t) \approx c_p + C_p \cos(\omega_p t) + S_p \sin(\omega_p t)
-]
+For each planet `p`, we model survival as:
 
-where:
+```
+y(t) ≈ c_p + C_p cos(ω_p t) + S_p sin(ω_p t)
+```
 
-* ( t ) = global trip index (1, 2, 3, …)
-* ( \omega_p = \frac{2\pi}{\text{period}_p} )
-* ( c_p ) = baseline survival (offset)
-* ( C_p, S_p ) = cosine/sine coefficients encoding amplitude + phase
+## Parameters
+
+- `t` = global trip index (1, 2, 3, …)
+- `ω_p = 2π / period_p`
+- `c_p` = baseline survival (offset)
+- `C_p, S_p` = cosine/sine coefficients encoding amplitude + phase
+
+## Fixed Periods by Planet
+
+Based on prior analysis, we use the following periods:
+
+- **Planet 0** → period 10
+- **Planet 1** → period 20
+- **Planet 2** → period 200
+
+## Learning Approach
+
+We learn `(c_p, C_p, S_p)` online using Recursive Least Squares (RLS), updating the parameters after each trip based on actual outcomes (survived/lost).
 
 We **fix the period** per planet (based on prior analysis):
 
@@ -190,7 +204,7 @@ We **fix the period** per planet (based on prior analysis):
 * Planet 1 → period 20
 * Planet 2 → period 200
 
-Then we **learn** ((c_p, C_p, S_p)) **online with RLS**, updating them after each trip based on what actually happened (survived / lost).
+Then we **learn** `(c_p, C_p, S_p)` **online with RLS**, updating them after each trip based on what actually happened (survived / lost).
 
 At each step:
 
@@ -206,11 +220,13 @@ At each step:
 
 ### 1.1. Parametrization
 
+# Model Assumptions
+
 The model assumes:
 
-[
-y(t) \approx c + C \cos(\omega t) + S \sin(\omega t)
-]
+```
+y(t) ≈ c + C cos(ω t) + S sin(ω t)
+```
 
 with a **fixed angular frequency**:
 
@@ -238,8 +254,8 @@ S = -A * np.sin(phi)
 
 So:
 
-* `offset` = (c)
-* `amplitude` = (\sqrt{C^2 + S^2})
+* `offset` = `c`
+* `amplitude` = `√(C² + S²)`
 * `phase` is recovered as `atan2(-S, C)`
 
 ### 1.2. Prediction
