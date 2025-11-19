@@ -19,7 +19,6 @@ from visualizations import (
     create_all_visualizations
 )
 
-
 def main():
     """Main example demonstrating the workflow."""
     
@@ -52,7 +51,11 @@ def main():
     
     # Explore each planet with a smaller number of trips for the example
     # You can increase trips_per_planet for more data
-    df = collector.explore_ucb_adaptive_confident(total_trips=1000, exploration_weight=2, memory_window=700)
+    df = collector.explore_phase_online_adaptive_policy(
+        early_explore_p0=0,
+        early_explore_p1=0,
+        early_explore_p2=0,)
+ 
     
     # Step 4: Analyze the data
     print("\n4. Analyzing collected data...")
